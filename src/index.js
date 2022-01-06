@@ -5,6 +5,8 @@ import markupList from './templates/markupList.hbs';
 import '@pnotify/core/dist/BrightTheme.css';
 import '@pnotify/core/dist/PNotify.css';
 import { success, error } from '@pnotify/core';
+import * as basicLightbox from 'basiclightbox';
+// const basicLightbox = require('basiclightbox')
 
 let search = '';
 let page = 1;
@@ -15,6 +17,7 @@ const btnRef = document.querySelector('.btn');
 
 inputRef.addEventListener('input', debounce(InputRefHandler, 500));
 btnRef.addEventListener('click', btnRefHandler);
+listRef.addEventListener('click', onGalleryClick);
 
 function InputRefHandler(event) {
   search = event.target.value;
@@ -30,11 +33,20 @@ function btnRefHandler(event) {
   createCard(search, page);
 }
 
+function onGalleryClick(event) {
+  event.preventDefault();
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  basicLightbox.create(`<img  src=${event.target.dataset.src}/>`).show();
+  console.dir(event.target.dataset.src);
+}
+
 axios.defaults.baseURL = 'https://pixabay.com/api/?image_type=photo&orientation=horizontal';
 
 const createCard = async (search, page = 1) => {
   try {
-    throw error;
+    // throw error;
     const key = '24996447-08cefc65ed9adacdd5c87d0b0';
     const {
       data: { hits },
